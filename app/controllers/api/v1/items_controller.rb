@@ -9,13 +9,26 @@ module Api
       end
 
       def show
-        render json: { status: 'success', message: 'Loaded items', data: @item }
+        render json: { status: 'success', message: 'Loaded the item', data: @item }
+      end
+
+      def create
+        item = Item.new(item_params)
+        if item.save
+          render json: { status: 'success', 'data': item }
+        else
+          render json: { status: 'ERROR', 'data': item.errors }
+        end
       end
 
       private
 
-      def  set_item
+      def set_item
         @item = Item.find(params[:id])
+      end
+
+      def item_params
+        params.require(:item).permit(:name, :price)
       end
 
     end
