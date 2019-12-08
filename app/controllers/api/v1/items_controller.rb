@@ -1,7 +1,7 @@
 module Api
   module V1
     class ItemsController < ApplicationController
-      before_action :set_item, only: [:show, :destroy]
+      before_action :set_item, only: [:show, :update ,:destroy]
 
       def index
         items = Item.order(created_at: :desc)
@@ -18,6 +18,14 @@ module Api
           render json: { status: 'success', data: item }
         else
           render json: { status: 'ERROR', data: item.errors }
+        end
+      end
+
+      def update
+        if @item.update(item_params)
+          render json: { status: 'success', message: 'Updated the item', data: @item }
+        else
+          render json: { status: 'ERROR', message: 'Not updated', data: @item.errors }
         end
       end
 
