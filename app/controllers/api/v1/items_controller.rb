@@ -1,7 +1,7 @@
 module Api
   module V1
     class ItemsController < ApplicationController
-      before_action :set_item, only: [:show]
+      before_action :set_item, only: [:show, :destroy]
 
       def index
         items = Item.order(created_at: :desc)
@@ -15,10 +15,15 @@ module Api
       def create
         item = Item.new(item_params)
         if item.save
-          render json: { status: 'success', 'data': item }
+          render json: { status: 'success', data: item }
         else
-          render json: { status: 'ERROR', 'data': item.errors }
+          render json: { status: 'ERROR', data: item.errors }
         end
+      end
+
+      def destroy
+        @item.destroy
+        render json: { status: 'SECCESS', message: 'Deleted the item', data: @item }
       end
 
       private
