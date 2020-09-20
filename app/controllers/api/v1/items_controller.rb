@@ -30,8 +30,10 @@ module Api
       end
 
       def destroy
-        @item.destroy
-        render json: { status: 'SECCESS', message: 'Deleted the item', data: @item }
+        if @item.destroy
+          @item.plans.destroy_all
+          render json: { status: 'SECCESS', message: 'Deleted the item', data: @item }
+        end
       end
 
       private
